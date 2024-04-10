@@ -1,0 +1,21 @@
+{% extends "timeclock/index.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+{% if not user.is_authenticated %}
+    <form method="post">
+        {% csrf_token %}
+        <div id="login-holder">
+            <h1>Welcome Back</h1>
+            <div id="login-inputs">
+                <label for="username">Username</label>
+                <input type="text" id="username">
+                <label for="password">Password</label>
+                <input type="password" id="password">
+            </div>
+        </div>
+    </form>
+{% endif %}
+{% endblock %}

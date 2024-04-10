@@ -1,0 +1,12 @@
+.navbar {
+    background-color: #5486d9;
+}
+
+.navbar-brand {
+    color: white;
+}
+
+#logout-button {
+    background-color: #13c296;
+    color: white;
+}
