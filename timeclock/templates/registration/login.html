@@ -1,21 +1,23 @@
-{% extends "timeclock/index.html" %}
-
-{% block title %}Login{% endblock %}
+{% extends "timeclock/base.html" %}
 
 {% block content %}
 
-{% if not user.is_authenticated %}
-    <form method="post">
-        {% csrf_token %}
-        <div id="login-holder">
-            <h1>Welcome Back</h1>
-            <div id="login-inputs">
+<form id="login-form" action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+    <div id="login-holder">
+        <h1 id="welcome-back">Welcome Back</h1>
+        <div id="login-inputs">
+            <div>
                 <label for="username">Username</label>
-                <input type="text" id="username">
-                <label for="password">Password</label>
-                <input type="password" id="password">
+                <input type="text" class="form-control border border-secondary" id="username" name="username" required>
             </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" class="form-control border border-secondary" id="password" name="password" required>
+            </div>
+            <button id="login-button" class="btn" type="submit">Login</button>
         </div>
-    </form>
-{% endif %}
+    </div>
+</form>
+
 {% endblock %}

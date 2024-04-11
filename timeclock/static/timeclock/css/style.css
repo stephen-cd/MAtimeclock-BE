@@ -1,12 +1,83 @@
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    max-width: 1500px;
+    margin: auto;
+    min-height: 100vh;
+    border-left: 1px solid #5486d9;
+    border-right: 1px solid #5486d9;
+}
+
 .navbar {
     background-color: #5486d9;
+    height: 60px;
 }
 
-.navbar-brand {
+.navbar-text {
     color: white;
+    font-size: 22px;
+    padding: 0;
+    margin: 0;
 }
 
-#logout-button {
+#login-button, #logout-button, #generate-button {
     background-color: #13c296;
     color: white;
+}
+
+#login-form {
+    margin-top: 150px;
+    display: flex;
+    justify-content: center;
+}
+
+#login-holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    scale: 1.1;
+}
+
+#login-inputs {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+#login-button {
+    width: 100px;
+    height: 50px;
+    font-size: 20px;
+    margin-top: 15px;
+}
+
+#welcome-back {
+    margin-bottom: 50px;
+}
+
+#logged-in-box {
+    display: inline-flex;
+    gap: 10px;
+}
+
+#date-inputs {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    width: fit-content;
+    gap: 20px;
+    margin-top: 50px;
+    scale: 1.1;
+    margin-left: 50px;
+}
+
+#generate-button {
+    width: 150px;
+    height: 50px;
 }
