@@ -24,10 +24,15 @@ RUN touch /var/www/html/access.log
 RUN chmod 775 /var/www/html/error.log
 RUN chown :www-data /var/www/html
 
+RUN mkdir -p /var/www/html/static
+RUN chmod 775 /var/www/html/static
+
 #RUN chown -R www-data:www-data /var/www/html
 #3RUN chmod -R 775 /var/www/html
 
 RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf
+
+RUN python manage.py collectstatic
 
 ADD ./site-config.conf /etc/apache2/sites-available/000-default.conf
 EXPOSE 80
