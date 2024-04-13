@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  web:
+    build: .  # Tells Docker Compose to build the image using the Dockerfile in the current directory
+    container_name: django_app
+    ports:
+      - "8000:80"  # Expose port 80 inside the container as port 8000 on the host
+    volumes:
+      - .:/var/www/html  # Mount the current directory to /var/www/html inside the container
+      - ./site-config.conf:/etc/apache2/sites-available/000-default.conf  # Mounts the config file directly
