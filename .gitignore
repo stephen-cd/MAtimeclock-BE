@@ -1,2 +1,5 @@
 MAvenv
 node_modules
+venv
+error.log
+access.log
