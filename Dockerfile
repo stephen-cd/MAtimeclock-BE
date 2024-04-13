@@ -20,8 +20,10 @@ RUN chown :www-data /var/www/html/db.sqlite3
 
 RUN touch /var/www/html/access.log
 RUN chmod 775 /var/www/html/access.log
-RUN touch /var/www/html/access.log
+
+RUN touch /var/www/html/error.log
 RUN chmod 775 /var/www/html/error.log
+
 RUN chown :www-data /var/www/html
 
 RUN mkdir -p /var/www/html/static
