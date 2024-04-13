@@ -3,3 +3,11 @@ node_modules
 venv
 error.log
 access.log
+
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media
