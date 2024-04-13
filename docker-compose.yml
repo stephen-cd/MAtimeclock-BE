@@ -6,5 +6,5 @@ services:
     ports:
       - "8000:80"  # Expose port 80 inside the container as port 8000 on the host
     volumes:
-      #- .:/var/www/html  # Mount the current directory to /var/www/html inside the container
+      #- .:/var/www/html  # Mount the current directory to /var/www/html inside the container <FIX THIS LATER!>
       - ./site-config.conf:/etc/apache2/sites-available/000-default.conf  # Mounts the config file directly
