@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.middleware.csrf import get_token
 from django.db import transaction
+import datetime
 
 from timeclock.models import Employee, Hours, Job
 
@@ -14,7 +15,25 @@ from timeclock.models import Employee, Hours, Job
 @login_required
 def index(request):
     user = request.user
-    return render(request, 'timeclock/index.html', {'user': user})
+    dates = list(set(Hours.objects.all().values_list('date', flat=True)))
+    dates = [datetime.datetime.strptime(date, '%Y-%m-%d').date() for date in dates]
+    min_date = str(min(dates))
+    max_date = str(max(dates))
+    context = {
+        'user': user,
+        'min_date': min_date,
+        'max_date': max_date,
+    }
+
+    if request.method == 'GET':
+        start_date = request.GET.get('start-date')
+        end_date = request.GET.get('end-date')
+        hours = Hours.objects.filter(date__range=(start_date, end_date))
+        context['start_date'] = start_date
+        context['end_date'] = end_date
+        context['hours'] = hours
+
+    return render(request, 'timeclock/index.html', context)
 
 @ensure_csrf_cookie
 def update_db(request):

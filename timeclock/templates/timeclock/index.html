@@ -1,17 +1,19 @@
 {% extends "timeclock/base.html" %}
 
 {% block content %}
-<div id="date-inputs">
-    <div>
-        <label for="start">Start</label>
-        <input id="start" class="form-control border border-secondary" type="date">
+<form method="get">
+    <div id="date-inputs">
+        <div>
+            <label for="start">Start</label>
+            <input id="start" class="form-control border border-secondary" type="date" min="{{ min_date }}" max="{{ max_date }}" name="start-date" {% if start_date %}value="{{ start_date }}"{% endif %} required>
+        </div>
+        <div>
+            <label for="end">End</label>
+            <input id="end" class="form-control border border-secondary" type="date" min="{{ min_date }}" max="{{ max_date }}" name="end-date" {% if end_date %}value="{{ end_date }}"{% endif %} required>
+        </div>
+        <button id="generate-button" class="btn" type="submit">Generate Report</button>
     </div>
-    <div>
-        <label for="end">End</label>
-        <input id="end" class="form-control border border-secondary" type="date">
-    </div>
-    <button id="generate-button" class="btn">Generate Report</button>
-</div>
+</form>
 
 {% load static %}
 <script src="{% static 'timeclock/js/index.js' %}"></script>
