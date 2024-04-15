@@ -13,6 +13,57 @@
         </div>
         <button id="generate-button" class="btn" type="submit">Generate Report</button>
     </div>
+    {% if job_dict and employee_dict %}
+        <h5>Amounts in format Hours:Minutes</h5>
+        <div class="table-holder">
+            <h2>Job View</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Job</th>
+                        {% for employee in employees %}
+                            <th>{{ employee }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job_id, employees_and_hours in job_dict.items %}
+                        <tr>
+                            <td>{{ job_id }}</td>
+                            {% for employee, hours in employees_and_hours.items %}
+                                    <td>{{ hours }}</td>
+            
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="table-holder">
+            <h2>Employee View</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        {% for job in jobs %}
+                            <th>{{ job }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee, jobs_and_hours in employee_dict.items %}
+                        <tr>
+                            <td>{{ employee }}</td>
+                            {% for job, hours in jobs_and_hours.items %}
+                                    <td>{{ hours }}</td>
+            
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 </form>
 
 {% load static %}

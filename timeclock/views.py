@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.middleware.csrf import get_token
 from django.db import transaction
-import datetime
+from datetime import datetime, date
 
 from timeclock.models import Employee, Hours, Job
 
@@ -16,7 +16,7 @@ from timeclock.models import Employee, Hours, Job
 def index(request):
     user = request.user
     dates = list(set(Hours.objects.all().values_list('date', flat=True)))
-    dates = [datetime.datetime.strptime(date, '%Y-%m-%d').date() for date in dates]
+    dates = [datetime.strptime(date, '%Y-%m-%d').date() for date in dates]
     min_date = str(min(dates))
     max_date = str(max(dates))
     context = {
@@ -28,10 +28,64 @@ def index(request):
     if request.method == 'GET':
         start_date = request.GET.get('start-date')
         end_date = request.GET.get('end-date')
-        hours = Hours.objects.filter(date__range=(start_date, end_date))
+        hours = Hours.objects.select_related('job_id', 'pin').filter(date__range=(start_date, end_date))
+        job_dict = {hrs.job_id.job_id: {} for hrs in hours}
+        employee_dict = {f'{hrs.pin.first_name} {hrs.pin.last_name}': {} for hrs in hours}
+        for hrs in hours:
+            start_time = datetime.strptime(hrs.start_time, '%H:%M').time()
+            end_time = datetime.strptime(hrs.end_time, '%H:%M').time()
+            hours_for_session = datetime.combine(date.min, end_time) - datetime.combine(date.min, start_time)
+
+            if not job_dict[hrs.job_id.job_id]:
+                job_dict[hrs.job_id.job_id][f'{hrs.pin.first_name} {hrs.pin.last_name}'] = hours_for_session
+                job_dict[hrs.job_id.job_id]['total'] = hours_for_session
+            else:
+                if not f'{hrs.pin.first_name} {hrs.pin.last_name}' in list(job_dict[hrs.job_id.job_id].keys()):
+                    job_dict[hrs.job_id.job_id][f'{hrs.pin.first_name} {hrs.pin.last_name}'] = hours_for_session
+                else:
+                    job_dict[hrs.job_id.job_id][f'{hrs.pin.first_name} {hrs.pin.last_name}'] = job_dict[hrs.job_id.job_id][f'{hrs.pin.first_name} {hrs.pin.last_name}'] + hours_for_session
+                job_dict[hrs.job_id.job_id]['total'] = job_dict[hrs.job_id.job_id]['total'] + hours_for_session
+            
+            if not employee_dict[f'{hrs.pin.first_name} {hrs.pin.last_name}']:
+                employee_dict[f'{hrs.pin.first_name} {hrs.pin.last_name}'][hrs.job_id.job_id] = hours_for_session
+                employee_dict[f'{hrs.pin.first_name} {hrs.pin.last_name}']['total'] = hours_for_session
+            else:
+                if not hrs.job_id.job_id in list(employee_dict[f'{hrs.pin.first_name} {hrs.pin.last_name}'].keys()):
+                    employee_dict[f'{hrs.pin.first_name} {hrs.pin.last_name}'][hrs.job_id.job_id] = hours_for_session
+                else:
+                    employee_dict[f'{hrs.pin.first_name} {hrs.pin.last_name}'][hrs.job_id.job_id] = employee_dict[f'{hrs.pin.first_name} {hrs.pin.last_name}'][hrs.job_id.job_id] + hours_for_session  
+                employee_dict[f'{hrs.pin.first_name} {hrs.pin.last_name}']['total'] = employee_dict[f'{hrs.pin.first_name} {hrs.pin.last_name}']['total'] + hours_for_session
+        
+        employees = list(employee_dict.keys())
+        employees.append('Total')
+
+        jobs = list(job_dict.keys())
+        jobs.append('Total')
+
+        for job_id, employees_and_hours in job_dict.items():
+            for employee in employees:
+                if employee != 'Total' and employee not in employees_and_hours.keys():
+                    employees_and_hours[employee] = '0:00'
+            employees_and_hours['total'] = employees_and_hours.pop('total')
+            for employee, hours in employees_and_hours.items():
+                job_dict[job_id][employee] = str(hours)[:-3]
+        for name, jobs_and_hours in employee_dict.items():
+            for job in jobs:
+                if job != 'Total' and job not in jobs_and_hours.keys():
+                    jobs_and_hours[job] = '0:00'
+            jobs_and_hours['total'] = jobs_and_hours.pop('total')
+            for job, hours in jobs_and_hours.items():
+                employee_dict[name][job] = str(hours)[:-3]
+
         context['start_date'] = start_date
         context['end_date'] = end_date
         context['hours'] = hours
+        context['job_dict'] = job_dict
+        context['employee_dict'] = employee_dict
+        context['employees'] = employees
+        context['jobs'] = jobs
+
+        print(job_dict)
 
     return render(request, 'timeclock/index.html', context)
 

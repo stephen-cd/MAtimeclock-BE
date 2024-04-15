@@ -4,11 +4,7 @@ html {
 }
 
 body {
-    max-width: 1500px;
-    margin: auto;
     min-height: 100vh;
-    border-left: 1px solid #5486d9;
-    border-right: 1px solid #5486d9;
 }
 
 .navbar {
@@ -80,4 +76,28 @@ body {
 #generate-button {
     width: 150px;
     height: 50px;
+}
+
+table {
+    border: 1px solid black;
+    table-layout: fixed;
+    width: 75% !important;
+    margin: auto;
+    font-size: 20px;
+}
+
+h2 {
+    text-align: left;
+    width: 75%;
+    margin: auto auto 10px auto;
+}
+
+h5 {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 0;
+}
+
+.table-holder {
+    margin: 50px 0;
 }
