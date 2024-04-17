@@ -2,22 +2,25 @@
 
 {% block content %}
 <form method="get">
+    <h5 id="instructions">Select a start date and end date and then click Generate Report to see reports of job hours per employee and employee hours per job.<br><br>Please select the same date for both dates to see data for one day.</h5>
+
     <div id="date-inputs">
         <div>
             <label for="start">Start</label>
-            <input id="start" class="form-control border border-secondary" type="date" min="{{ min_date }}" max="{{ max_date }}" name="start-date" {% if start_date %}value="{{ start_date }}"{% endif %} required>
+            <input id="start" class="form-control border border-secondary" type="date" name="start-date" {% if start_date %}value="{{ start_date }}"{% endif %} required>
         </div>
         <div>
             <label for="end">End</label>
-            <input id="end" class="form-control border border-secondary" type="date" min="{{ min_date }}" max="{{ max_date }}" name="end-date" {% if end_date %}value="{{ end_date }}"{% endif %} required>
+            <input id="end" class="form-control border border-secondary" type="date" name="end-date" {% if end_date %}value="{{ end_date }}"{% endif %} required>
         </div>
         <button id="generate-button" class="btn" type="submit">Generate Report</button>
         <div style="margin: 20px 0 0 0">Last Updated: {{ last_updated }}</div>
-    </div>
+    </div><br><br>
+    <hr>
     {% if job_dict and employee_dict %}
-        <h5>Amounts in format Hours:Minutes</h5>
+        <h5>*Time amount format - Hours:Minutes</h5>
         <div class="table-holder">
-            <h2>Job View</h2>
+            <h2>Jobs - Hours per Employee</h2>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -41,7 +44,7 @@
             </table>
         </div>
         <div class="table-holder">
-            <h2>Employee View</h2>
+            <h2>Employees - Hours per Job</h2>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -64,6 +67,10 @@
                 </tbody>
             </table>
         </div>
+        {% elif invalid_date_range %}
+            <h2 id="invalid-date-range">Invalid Date Range</h2>
+        {% elif not hours and start_date and end_date %}
+            <h2 id="no-results">No Results</h2>
     {% endif %}
 </form>
 

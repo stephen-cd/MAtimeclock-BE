@@ -1,9 +1,9 @@
 import json
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
 from django.middleware.csrf import get_token
 from django.db import transaction
 from datetime import datetime, date
@@ -18,16 +18,25 @@ def index(request):
     min_date = str(min(dates))
     max_date = str(max(dates))
     last_updated = open('last-updated.txt').read()
+    start_date = request.GET.get('start-date')
+    end_date = request.GET.get('end-date')
     context = {
         'user': user,
         'min_date': min_date,
         'max_date': max_date,
         'last_updated': last_updated,
+        'invalid_date_range': False,
+        'start_date': start_date,
+        'end_date': end_date,
     }
 
-    if request.method == 'GET':
+    if request.method == 'GET' and start_date and end_date:
         start_date = request.GET.get('start-date')
         end_date = request.GET.get('end-date')
+
+        if datetime.strptime(start_date, '%Y-%m-%d').date() > datetime.strptime(end_date, '%Y-%m-%d').date():
+            context['invalid_date_range'] = True
+        
         hours = Hours.objects.select_related('job_id', 'pin').filter(date__range=(start_date, end_date)).order_by('pin__last_name')
         employees = {hrs.pin.pin: f'{hrs.pin.first_name} {hrs.pin.last_name}' for hrs in hours}
         employees = list(employees.values())
@@ -126,7 +135,7 @@ def dump(db, new_employees, new_jobs, new_hours=None, new_hours_data=None):
     for hours in hours_to_delete:
         hours.delete()
 
-@ensure_csrf_cookie
+@csrf_exempt
 def update_db(request):
     if request.method == 'GET':
         token = get_token(request)
