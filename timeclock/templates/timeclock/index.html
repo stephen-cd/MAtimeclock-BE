@@ -12,6 +12,7 @@
             <input id="end" class="form-control border border-secondary" type="date" min="{{ min_date }}" max="{{ max_date }}" name="end-date" {% if end_date %}value="{{ end_date }}"{% endif %} required>
         </div>
         <button id="generate-button" class="btn" type="submit">Generate Report</button>
+        <div style="margin: 20px 0 0 0">Last Updated: {{ last_updated }}</div>
     </div>
     {% if job_dict and employee_dict %}
         <h5>Amounts in format Hours:Minutes</h5>
