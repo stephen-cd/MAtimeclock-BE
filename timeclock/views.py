@@ -63,6 +63,8 @@ def index(request):
             job_id = hrs.job_id.job_id
             first_name = hrs.pin.first_name
             last_name = hrs.pin.last_name
+            if not hrs.end_time:
+                continue
             start_time = datetime.strptime(hrs.start_time, '%H:%M').time()
             end_time = datetime.strptime(hrs.end_time, '%H:%M').time()
             hours_for_session = datetime.combine(date.min, end_time) - datetime.combine(date.min, start_time)
