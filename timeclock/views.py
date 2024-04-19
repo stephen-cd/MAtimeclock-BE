@@ -10,6 +10,15 @@ from datetime import datetime, date
 from timeclock.models import Employee, Hours, Job
 from django.db.models import Q
 
+def timedelta_to_hours_minutes(td):
+    if isinstance(td, str):
+        return td
+
+    total_seconds = int(td.total_seconds())
+    hours = total_seconds // 3600
+    minutes = (total_seconds % 3600) // 60
+    return f"{hours}:{minutes:02}"
+
 @login_required
 def index(request):
     user = request.user
@@ -87,11 +96,14 @@ def index(request):
 
         for job_id, employees_and_hours in job_dict.items():
             for employee, hours in employees_and_hours.items():
-                job_dict[job_id][employee] = str(hours)[:-3]
+                #job_dict[job_id][employee] = str(hours)[:-3]
+                job_dict[job_id][employee] = str(timedelta_to_hours_minutes(hours))
+
 
         for name, jobs_and_hours in employee_dict.items():
             for job, hours in jobs_and_hours.items():
-                employee_dict[name][job] = str(hours)[:-3]
+                #employee_dict[name][job] = str(hours)[:-3]
+                employee_dict[name][job] = str(timedelta_to_hours_minutes(hours))
 
         context['start_date'] = start_date
         context['end_date'] = end_date
