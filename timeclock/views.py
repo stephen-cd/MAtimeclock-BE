@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.middleware.csrf import get_token
 from django.db import transaction
 from datetime import datetime, date
+
+from MAtimeclock.settings import DATA_DIR
 from timeclock.models import Employee, Hours, Job
 from django.db.models import Q
 
@@ -26,7 +28,7 @@ def index(request):
     dates = [datetime.strptime(date, '%Y-%m-%d').date() for date in dates]
     min_date = str(min(dates))
     max_date = str(max(dates))
-    last_updated = open('last-updated.txt').read()
+    last_updated = open(DATA_DIR + '/last-updated.txt').read()
     start_date = request.GET.get('start-date')
     end_date = request.GET.get('end-date')
     context = {
@@ -168,7 +170,7 @@ def update_db(request):
             dump('default', employees_from_fe, jobs_from_fe, new_hours_data=data[2])
 
             last_updated = datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
-            file = open('last-updated.txt', 'w')
+            file = open(DATA_DIR + '/last-updated.txt', 'w')
             file.write(last_updated)
             file.close()
 

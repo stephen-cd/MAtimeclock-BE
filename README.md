@@ -8,12 +8,24 @@ Note: This application was built to be used with a Raspberry Pi and the official
 
 <h1>Setup</h1>
 
-<h3>Prerequisites</h3>
+<h2>Prerequisites: set up virtualenv</h2>
 
-Latest versions of Python and Django are installed and a Django project folder has been created for the application. The steps to accomplish this can be found [here](https://docs.djangoproject.com/en/5.0/intro/tutorial01/).
+virtualenv -p python3 venv<br>
+source venv/bin/activate<br>
+pip install -r requirements.txt
 
-While in the same directory as manage.py, run python manage.py createsuperuser to create a user.<br>
+<h3>create database</h3>
+While in the same directory as manage.py, run python manage.py migrate to create a blank database<br>
+
+run python manage.py createsuperuser to create a user.<br>
+
+finally, create the 'backup database' by running this in the data folder: cp db.sqlite3 db-backup.sqlite3
+
+<h3>run server</h3>
 Run python manage.py runserver to run the server and visit 127.0.0.1:8000 to see the login page.
 
 <h1>Report Generation</h1>
 Login in as the user made in Setup, then select a start date and and end date and click Generate Report. Results will show only if the back-end SQLite database has been synced by the front-end (See MAtimeclock repository for more information on how this is accomplished). If results are shown, there will be 2 tables, one that displays hours per employee per job with totals and one that displays hours per job per employee with totals.
+
+<h1>Server Deployment</h1>
+Please see README_DOCKER.MD for next steps

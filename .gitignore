@@ -2,6 +2,7 @@ MAvenv
 node_modules
 db.sqlite3
 last-updated.txt
+data/
 
 # Django #
 *.log
@@ -21,6 +22,7 @@ media
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea
 
 # AWS User-specific
 .idea/**/aws.xml
