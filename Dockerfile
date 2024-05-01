@@ -51,5 +51,5 @@ ADD ./site-config.conf /etc/apache2/sites-available/000-default.conf
 
 EXPOSE 80
 #CMD ["apache2ctl", "-D", "FOREGROUND"]
-CMD ["sh", "-c", "apache2ctl -D FOREGROUND & tail -f /var/www/html/*log"]
+CMD ["sh", "-c", "apache2ctl -D FOREGROUND & tail -f /var/www/html/data/*log"]
 #CMD ["sh", "-c", "tail -f /var/www/html/*log"]
