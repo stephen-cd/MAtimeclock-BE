@@ -5,12 +5,12 @@ if you need this, please follow the database setup in README.MD
 # Setup
 to build, run command: sudo docker-compose build
 
-# Run the script to bring up the docker, exposed to port 8000 by default, the exposed port can be configured in docker-compose.yaml
-# This script needs to be run to ensure permissions are set for the data folder, after, you can run docker-compose up
+# Run the script to bring up the docker. This script needs to be run to ensure permissions are set for the data folder, after, you can run docker-compose up
+# _note: you may need to run the below command as sudo depending on your system permissions_
 ./start-container.sh
 
-# Access
-Should be accessible through 127.0.0.1:8000 with default settings.
+# Access (the exposed port can be configured in docker-compose.yaml)
+Should be accessible through 127.0.0.1:8888 with default settings.
 
 # Create superuser [only if you don't have a db.sqlite3 with a superuser to login with]
 docker-compose run matimeclock-server python manage.py createsuperuser

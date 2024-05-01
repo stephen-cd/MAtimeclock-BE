@@ -29,6 +29,9 @@ RUN chmod 775 /var/www/html/access.log
 RUN touch /var/www/html/error.log
 RUN chmod 775 /var/www/html/error.log
 
+RUN touch /var/www/html/last-updated.txt
+RUN chmod 775 /var/www/html/last-updated.txt
+
 RUN chown :www-data /var/www/html
 
 RUN mkdir -p /var/www/html/static
@@ -44,8 +47,9 @@ RUN python manage.py collectstatic
 ADD ./site-config.conf /etc/apache2/sites-available/000-default.conf
 
 # set permissions of database directory to be owned by www-user
-RUN chown -R 33:33 /var/www/html/data
+# RUN chown -R 33:33 /var/www/html/data
 
 EXPOSE 80
 #CMD ["apache2ctl", "-D", "FOREGROUND"]
 CMD ["sh", "-c", "apache2ctl -D FOREGROUND & tail -f /var/www/html/*log"]
+#CMD ["sh", "-c", "tail -f /var/www/html/*log"]

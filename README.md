@@ -19,8 +19,10 @@ While in the same directory as manage.py, run python manage.py migrate to create
 
 run python manage.py createsuperuser to create a user.<br>
 
+finally, create the 'backup database' by running this in the data folder: cp db.sqlite3 db-backup.sqlite3
+
 <h3>run server</h3>
-Finally, Run python manage.py runserver to run the server and visit 127.0.0.1:8000 to see the login page.
+Run python manage.py runserver to run the server and visit 127.0.0.1:8000 to see the login page.
 
 <h1>Report Generation</h1>
 Login in as the user made in Setup, then select a start date and and end date and click Generate Report. Results will show only if the back-end SQLite database has been synced by the front-end (See MAtimeclock repository for more information on how this is accomplished). If results are shown, there will be 2 tables, one that displays hours per employee per job with totals and one that displays hours per job per employee with totals.
