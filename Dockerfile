@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:22.04
 RUN apt-get update
 RUN apt-get install -y apt-utils vim curl apache2 apache2-utils
 RUN apt-get -y install python3 libapache2-mod-wsgi-py3
@@ -38,4 +38,5 @@ RUN python manage.py collectstatic
 
 ADD ./site-config.conf /etc/apache2/sites-available/000-default.conf
 EXPOSE 80
-CMD ["apache2ctl", "-D", "FOREGROUND"]
+#CMD ["apache2ctl", "-D", "FOREGROUND"]
+CMD ["sh", "-c", "apache2ctl -D FOREGROUND & tail -f /var/log/apache2/*log"]
