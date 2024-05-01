@@ -11,10 +11,15 @@ RUN pip3 install --upgrade pip
 WORKDIR /var/www/html
 COPY . /var/www/html/
 
+RUN DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/New_York
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get install tzdata
+
 RUN pip3 install -r requirements.txt
 
-RUN chmod 664 /var/www/html/db.sqlite3
-RUN chown :www-data /var/www/html/db.sqlite3
+#RUN chmod 664 /var/www/html/db.sqlite3
+#RUN chown :www-data /var/www/html/db.sqlite3
 
 #RUN mkdir -p /var/www/html/logs
 
@@ -37,6 +42,10 @@ RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf
 RUN python manage.py collectstatic
 
 ADD ./site-config.conf /etc/apache2/sites-available/000-default.conf
+
+# set permissions of database directory to be owned by www-user
+RUN chown -R 33:33 /var/www/html/data
+
 EXPOSE 80
 #CMD ["apache2ctl", "-D", "FOREGROUND"]
-CMD ["sh", "-c", "apache2ctl -D FOREGROUND & tail -f /var/log/apache2/*log"]
+CMD ["sh", "-c", "apache2ctl -D FOREGROUND & tail -f /var/www/html/*log"]
